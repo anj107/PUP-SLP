@@ -1,0 +1,36 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Custom red focus styles */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    outline: none;
+    border: 2px solid rgba(235, 58, 50, 0.6); /* Soft stroke */
+    box-shadow: 0 0 15px rgba(235, 58, 50, 0.25); /* Softer red glow */
+}
+
+/*.btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(235, 58, 50, 0.3);
+    transition: all 0.2s ease-in-out;
+} */
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}

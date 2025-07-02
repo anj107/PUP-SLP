@@ -1,0 +1,74 @@
+﻿body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    color: red;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar {
+    position: sticky;
+    top: 62px;
+    background-color: #F6F7F9;
+    width: 250px;
+    height: calc(100vh - 62px);
+    overflow-y: auto;
+    padding-top: 20px;
+    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.25);
+}
+
+    .sidebar a {
+        display: block;
+        padding: 10px 20px;
+        color: red;
+        text-decoration: none;
+    }
+
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+
+    .sidebar .section-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: red;
+        font-weight: bold;
+        color: #666;
+        pointer-events: none;
+    }
+
+.main-layout {
+    display: flex;
+}
+
+.content-wrapper {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.title-section {
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.welcome-message {
+    font-size: 1rem;
+    text-align: right;
+}

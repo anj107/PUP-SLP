@@ -1,0 +1,43 @@
+﻿.dashboard-card {
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-header {
+    border-radius: 0.8rem;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.dashboard-row {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+    .dashboard-row:last-child {
+        border-bottom: none;
+    }
+
+.dashboard-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.dashboard-value {
+    color: #333;
+    font-size: 1rem;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: start;
+}
+
+.btn-custom {
+    border-radius: 0.8rem !important;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
