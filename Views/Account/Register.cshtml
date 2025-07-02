@@ -1,0 +1,63 @@
+﻿@model pupslp_tickets.Models.AccountLoginModel
+
+@{
+    ViewBag.Title = "Register";
+    ViewData["ShowSidebar"] = false;
+    ViewData["ShowAdminName"] = false;
+    ViewData["ShowLogOut"] = false;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex flex-column align-items-center justify-content-center text-center vh-100">
+    <!-- Logo -->
+    <img src="~/images/PUP SLP Logo Big.png" alt="PUP Logo" style="height: 150px;" class="mb-3" />
+
+    <!-- Title -->
+    <h2 class="fw-bold mb-2">Create Your Account</h2>
+    <p class="mb-4 text-muted">Register as an Admin for the PUP Sining-Lahi Ticketing System</p>
+
+    <!-- Register Form -->
+    <div class="w-100" style="max-width: 400px; text-align: left;">
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label mb-0"></label>
+                <input asp-for="Username" class="form-control" style="border-radius: 0.8rem;" />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label mb-0"></label>
+                <input asp-for="Password" type="password" class="form-control" style="border-radius: 0.8rem;" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <!-- Recovery Email -->
+            <div class="mb-3">
+                <label asp-for="RecoveryEmail" class="form-label mb-0">Recovery Email</label>
+                <input asp-for="RecoveryEmail" class="form-control" style="border-radius: 0.8rem;" />
+                <span asp-validation-for="RecoveryEmail" class="text-danger small"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-danger btn-lg w-100 fs-6" style="border-radius: 0.8rem;">
+                Register
+            </button>
+        </form>
+
+        <!-- Login link -->
+        <div class="d-flex justify-content-start mt-3">
+            <p class="mb-0 small">
+                Already have an account?
+                <a asp-action="Login" asp-controller="Account" class="text-danger fw-semibold">Login here</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

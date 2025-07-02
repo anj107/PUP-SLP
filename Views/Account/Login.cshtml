@@ -1,0 +1,69 @@
+﻿@model pupslp_tickets.Models.AccountLoginModel
+
+@{
+    ViewData["Title"] = "Login";
+    ViewData["ShowSidebar"] = false;
+    ViewData["ShowAdminName"] = false;
+    ViewData["ShowLogOut"] = false;
+}
+
+<div class="d-flex flex-column align-items-center justify-content-center text-center vh-100">
+    <!-- Logo -->
+    <img src="~/images/PUP SLP Logo Big.png" alt="PUP Logo" style="height: 150px;" class="mb-3" />
+
+    <!-- Title -->
+    <h2 class="fw-bold mb-2">Welcome! Sining-Lahi Admin</h2>
+    <p class="mb-4 text-muted">Sign in to start your session.</p>
+
+    <!-- Login Form -->
+    <div class="w-100" style="max-width: 400px; text-align: left;">
+        <form asp-controller="Account" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label mb-0"></label>
+                <input asp-for="Username" class="form-control" style="border-radius: 0.8rem;" />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-1">
+                <label asp-for="Password" class="form-label mb-0"></label>
+                <input asp-for="Password" type="password" class="form-control" style="border-radius: 0.8rem;" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <!-- Forgot password link -->
+            <div class="d-flex justify-content-end mb-3">
+                <a asp-action="ForgotPassword" asp-controller="Account" class="text-danger small">Forgot password?</a>
+            </div>
+
+            <!-- Login button -->
+            <button type="submit"
+                    class="btn btn-danger btn-lg w-100 fs-6"
+                    style="border-radius: 0.8rem;"
+                    onclick="showLoading()">
+                Login
+            </button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger mt-3">@ViewBag.ErrorMessage</div>
+        }
+
+        <!-- Sign up link -->
+        <div class="d-flex justify-content-start mt-3">
+            <p class="mb-0 small">
+                Don't have an account?
+                <a asp-action="Register" asp-controller="Account" class="text-danger fw-semibold">Register</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

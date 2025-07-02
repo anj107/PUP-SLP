@@ -1,0 +1,163 @@
+﻿@model List<pupslp_tickets.Models.RegTicketModel>
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-dump.css" />
+}
+
+
+@{
+    ViewData["Title"] = "Audience and Schedule";
+}
+
+<div class="container mt-4">
+    <h3>Attendance Dashboard</h3>
+
+    <!-- Responsive columns: 1 on XS, 2 on SM, 3 on MD, up to 6 on XL -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-6 g-3">
+
+        <!-- Example Static Card -->
+        <div class="col">
+            <div class="dashboard-card d-flex flex-column justify-content-between align-items-center text-center h-100"
+                 style="min-height: 180px; border-radius: 1.2rem;">
+                <div>
+                    <h4 style="color: #EB3A32; font-size: 1.5rem; margin-bottom: 0.25rem;">
+                        @ViewBag.TotalTicketsGenerated
+                    </h4>
+                    <p style="color: rgb(12,12,12); font-size: 0.9rem; margin-bottom: 0;">Total Tickets</p>
+                </div>
+                <hr style="border-top: 1.5px dashed #EB3A32; width: 100%; margin: 0;" />
+                <div>
+                    <h4 style="color: #EB3A32; font-size: 1.5rem; margin-bottom: 0.25rem;">
+                        @ViewBag.TotalRemainingSeats
+                    </h4>
+                    <p style="color: rgb(12,12,12); font-size: 0.9rem; margin-bottom: 0;">
+                        Remaining (of @ViewBag.TotalEventCapacity)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attended Card -->
+        <div class="col">
+            <div class="dashboard-card d-flex flex-column justify-content-center align-items-center text-center h-100"
+                 style="min-height: 180px;">
+                <i class="bi bi-person-check-fill dashboard-icon"></i>
+                <h2>@ViewBag.TotalAttended</h2>
+                <p>Attended Participants</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Ticket Cards -->
+        @if (ViewBag.TicketTypeSummary != null)
+        {
+            foreach (var item in ViewBag.TicketTypeSummary)
+            {
+                var iconClass = "bi bi-ticket-detailed-fill";
+                <div class="col">
+                    <div class="dashboard-card d-flex flex-column justify-content-center align-items-center text-center h-100"
+                         style="min-height: 180px;">
+                        <i class="@iconClass dashboard-icon"></i>
+                        <h2>@item.TotalTickets</h2>
+                        <p>@item.TicketType Tickets</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+
+
+<div class="container mt-4">
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="custom-table-container mb-3">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>University</th>
+                        <th>Invited by</th>
+                        <th>Venue</th>
+                        <th>Ticket Type</th>
+                        <th>Proof</th>
+                        <th>Attendance</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in Model)
+                    {
+                        if (!string.IsNullOrEmpty(ticket.ticketNumber))
+                        {
+                            var user = ticket.RegistrationFormModel?.RegUserModel;
+                            <tr>
+                                <td>@ticket.ticketNumber</td>
+                                <td>@user?.regName</td>
+                                <td>@user?.regEmail</td>
+                                <td>@user?.regContactNumber</td>
+                                <td>@user?.regUniv</td>
+                                <td>@user?.regInvitedBy</td>
+                                <td>@ticket.regVenue</td>
+                                <td>@ticket.ticketType</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(ticket.RegistrationFormModel?.RegPaymentModel?.regProofPayment))
+                                    {
+                                        <form onsubmit="openProof('@ticket.RegistrationFormModel.RegPaymentModel.regProofPayment'); return false;" style="display:inline;">
+                                            <button type="submit" class="btn btn-info btn-sm">GCash</button>
+                                        </form>
+                                    }
+                                    else if (ticket.RegistrationFormModel?.RegPaymentModel?.regPaymentMode == "Cash" || ticket.RegistrationFormModel?.RegPaymentModel == null)
+                                    {
+                                        <span class="text-muted">Cash</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-controller="Attendance" asp-action="ToggleAttendance" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@ticket.Id" />
+                                        <button type="submit" class="btn @(ticket.IsAttended ? "btn-success" : "btn-warning") btn-sm">
+                                            @(ticket.IsAttended ? "Attended" : "Absent")
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form asp-controller="Attendance" asp-action="DeleteTicketById" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@ticket.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete ticket @ticket.ticketNumber?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+    else
+    {
+        <p>No registrations found.</p>
+    }
+</div>
+
+<script>
+    function openProof(url) {
+        const width = 500;
+        const height = 600;
+        const left = (screen.width / 2) - (width / 2);
+        const top = (screen.height / 2) - (height / 2);
+        const features = `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`;
+        window.open(url, 'ProofOfPayment', features);
+    }
+</script>

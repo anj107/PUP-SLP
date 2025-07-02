@@ -1,0 +1,578 @@
+﻿@model pupslp_tickets.Models.RegistrationFormModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Registration Form";
+}
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to right, #8B0000, #ffffff);
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: 40px 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        display: flex;
+        width: 90%;
+        max-width: 1000px;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #8B0000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        flex-wrap: wrap;
+    }
+
+    .image-section {
+        width: 30%;
+        background-image: url('/images/PUP_SLPicTwo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        min-height: 400px;
+    }
+
+    .event-ticket-enhanced {
+        display: flex;
+        background: #8B0000;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+        /* Side notches */
+        .event-ticket-enhanced::before,
+        .event-ticket-enhanced::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+        }
+
+        .event-ticket-enhanced::before {
+            left: -20px;
+        }
+
+        .event-ticket-enhanced::after {
+            right: -20px;
+        }
+
+    /* Columns */
+    .ticket-poster {
+        flex: 0 0 160px;
+        padding-left: 12px;
+    }
+
+    .poster-image {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .ticket-description-center {
+        flex: 1.2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin-right: 0;
+        padding-right: 8px;
+    }
+
+    .show-title {
+        font-weight: 900;
+        font-size: 20px;
+        letter-spacing: 1px;
+        margin-bottom: 6px; /* reduce spacing below title */
+        margin-top: 0;
+        color: #ffffff;
+        text-transform: uppercase;
+    }
+
+    .description {
+        font-size: 12px;
+        color: white;
+        line-height: 1.5;
+        margin-top: 0;
+    }
+
+    .ticket-right {
+        flex: 1.5;
+    }
+
+    .book-now {
+        font-size: 22px;
+        color: #ffffff;
+        margin-bottom: 12px;
+        font-weight: bold;
+    }
+
+        .book-now span {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+    .ticket-info {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        font-size: 12px;
+    }
+
+        .ticket-info .label {
+            font-weight: 150;
+            color: #fce8c3;
+            font-style: italic;
+        }
+
+        .ticket-info .value {
+            font-weight: 700;
+            color: white;
+        }
+
+    input:invalid, select:invalid {
+        border: 1px solid red;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .form-submit-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .submit-btn {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: wait;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+
+    .exit-wrapper {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 999;
+    }
+
+    .exit-button {
+        background-color: red;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* registration form enhancements */
+
+    .form-section {
+        flex: 1;
+        align-items: center;
+        width: 70%;
+        min-width: 300px;
+        padding: 20px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+        .form-section h2 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .form-section div {
+            margin-bottom: 5px;
+        }
+
+    .form-header {
+        background-color: #8B0000;
+        color: #fff;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 13px;
+        padding: 12px 20px;
+        margin-top: 16px;
+    }
+
+    .form-body-wrapper {
+        background-color: #f5f5f5;
+        padding: 0px 20px;
+        border-bottom-left-radious: 12px;
+        border-bottom-right-radious: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+        .form-body-wrapper > div {
+            margin-bottom: 16px;
+        }
+
+        .form-body-wrapper label {
+            color: #444; /* or your preferred color */
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+    .data-privacy-section {
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 12px;
+        color: #856404;
+    }
+
+        .data-privacy-section label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+
+    /* responsive in mobile view */
+    @@media (max-width: 768px) {
+        .image-section {
+            display: none;
+        }
+
+        .container {
+            border-radius: 0;
+            flex-direction: column;
+        }
+
+        .form-section {
+            width: 100%;
+        }
+
+        .event-ticket-enhanced {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .poster-image {
+            width: 100%;
+            max-width: 300px;
+            min-height: 200px;
+        }
+
+        .ticket-description-center {
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ticket-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .ticket-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            justify-items: center;
+            width: 100%;
+        }
+
+        .book-now {
+            margin-top: 12px;
+        }
+    }
+</style>
+
+<script>
+    function handleSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        const paymentMode = form.querySelector('[name="RegPaymentModel.regPaymentMode"]').value;
+        const contactInput = document.querySelector('#regContactNumber');
+        const contactValue = contactInput.value.trim();
+
+        if (!/^\d{11}$/.test(contactValue)) {
+            contactInput.setCustomValidity("Please enter a valid 11-digit contact number.");
+        } else {
+            contactInput.setCustomValidity("");
+        }
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Submitting...';
+
+        setTimeout(() => {
+            alert("You've registered! Thank you!");
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Submit';
+            form.submit();
+        }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const paymentModeSelect = document.getElementById("paymentMode");
+        const proofContainer = document.getElementById("proofUploadContainer");
+
+        function toggleProofUpload() {
+            if (paymentModeSelect && proofContainer) {
+                proofContainer.style.display = paymentModeSelect.value === "GCash" ? "block" : "none";
+            }
+        }
+
+        if (paymentModeSelect) {
+            paymentModeSelect.addEventListener("change", toggleProofUpload);
+            toggleProofUpload(); // Call it once on load
+        }
+
+        const privacySelect = document.querySelector('[name="RegUserModel.dataPrivacyConsent"]');
+        const mainFields = document.getElementById("mainFormFields");
+        const submitBtn = document.querySelector('form button[type="submit"]');
+
+        function toggleFormFields() {
+            if (!privacySelect || !mainFields) return;
+
+            const allow = privacySelect.value === "true";
+            const inputs = mainFields.querySelectorAll("input, select, textarea, button");
+
+            inputs.forEach(input => {
+                if (!input.classList.contains("submit-btn")) {
+                    input.disabled = !allow;
+                }
+            });
+
+            submitBtn.disabled = !allow;
+
+            if (privacySelect.value === "false") {
+                alert("You must agree to the Data Privacy policy to proceed.");
+            }
+        }
+
+        if (privacySelect) {
+            privacySelect.addEventListener("change", toggleFormFields);
+            toggleFormFields(); // Initial state
+        }
+    });
+</script>
+
+
+
+<div class="exit-wrapper">
+    <a href="/Home/Index">
+        <button class="exit-button">Exit</button>
+    </a>
+</div>
+
+@if (Model.EventDetailsModel != null)
+{
+    <div class="container">
+        <div class="image-section"></div>
+
+        <div class="form-section">
+            <div class="event-ticket-enhanced">
+                <div class="ticket-poster">
+                    <img src="@Model.EventDetailsModel.eventPosterUrl" alt="Poster" class="poster-image" />
+                </div>
+
+                <div class="ticket-description-center">
+                    <h3 class="show-title"> @Model.EventDetailsModel.eventTitle.ToUpper()</h3>
+                    <p class="description">
+                        @Model.EventDetailsModel.eventDescription
+                    </p>
+                </div>
+
+                <div class="ticket-right">
+                    <h2 class="book-now">Book <span>now!</span> 🎟️</h2>
+                    <div class="ticket-info">
+                        <div>
+                            <span class="label">Place / Venue</span><br />
+                            <span class="value">@Model.EventDetailsModel.eventVenue</span>
+                        </div>
+                        <div>
+                            <span class="label">House Manager Name</span><br />
+                            <span class="value">@Model.EventDetailsModel.hmName</span>
+                        </div>
+                        <div>
+                            <span class="label">Capacity</span><br />
+                            <span class="value">@Model.EventDetailsModel.eventCapacity</span>
+                        </div>
+                        <div>
+                            <span class="label">House Manager Contact</span><br />
+                            <span class="value">@Model.EventDetailsModel.hmContactInfo</span>
+                        </div>
+                        <div>
+                            <span class="label">Time and Date</span><br />
+                            <span class="value">@Model.EventDetailsModel.eventDates.ToString("hh:mm tt, MMM dd yyyy")</span>
+                        </div>
+                        <div>
+                            <span class="label">Price</span><br />
+                            <span class="value">₱@Model.EventDetailsModel.eventPrice.ToString("F2")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-header">
+                <h2>REGISTRATION FORM</h2>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-body-wrapper">
+                <form asp-action="RegForm" asp-controller="RegForm" method="post" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
+                    @Html.AntiForgeryToken()
+
+                    <div class="data-privacy-section">
+                        <label for="dataPrivacyConsent">
+                            📄 By submitting this form, you consent to the collection and use of your information
+                            in accordance with the Data Privacy Act of 2012. Your data will only be used for
+                            registration and communication purposes related to this event.
+                        </label>
+                        <select asp-for="RegUserModel.dataPrivacyConsent" id="dataPrivacyConsent" required>
+                            <option value="">Select...</option>
+                            <option value="true">Agree</option>
+                            <option value="false">Disagree</option>
+                        </select>
+                    </div>
+                    <div id="mainFormFields">
+                        <div>
+                            <label for="regName">Name: </label>
+                            <input type="text" id="regName" asp-for="RegUserModel.regName" pattern="[A-Za-z\s]+" required />
+                        </div>
+                        <div>
+                            <label for="regEmail">Email: </label>
+                            <input type="email" id="regEmail" asp-for="RegUserModel.regEmail" required />
+                        </div>
+                        <div>
+                            <label for="regContactNumber">Contact: </label>
+                            <input type="text" id="regContactNumber" asp-for="RegUserModel.regContactNumber" pattern="\d{11}" required />
+                        </div>
+                        <div>
+                            <label for="regInvitedBy">Invited by: </label>
+                            <input type="text" id="regInvitedBy" asp-for="RegUserModel.regInvitedBy" required />
+                        </div>
+                        <div>
+                            <label for="regUniv">University: </label>
+                            <input type="text" id="regUniv" asp-for="RegUserModel.regUniv" required />
+                        </div>
+
+                        <!-- Tickets -->
+                        @for (int i = 0; i < Model.RegTicketModels.Count; i++)
+                        {
+                            <input type="hidden" name="RegTicketModels.Index" value="@i" />
+
+                            <div>
+                                <label asp-for="RegTicketModels[i].regTicketQuantity">Ticket Quantity:</label>
+                                <input min="1" type="number" asp-for="RegTicketModels[i].regTicketQuantity" class="form-control" required />
+                            </div>
+                            <div>
+                                <label asp-for="RegTicketModels[i].ticketType">Ticket Type:</label>
+                                <select asp-for="RegTicketModels[i].ticketType" class="form-control" required>
+                                    <option value="">Select...</option>
+                                    <option value="Regular">Regular</option>
+                                    <option value="Invited">Invited</option>
+                                    <option value="Sponsor/Partnership">Sponsor/Partnership</option>
+                                    <option value="Walk-In">Walk-In</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label asp-for="RegTicketModels[i].regVenue">Venue:</label>
+                                <input type="text" asp-for="RegTicketModels[i].regVenue" class="form-control" required />
+                            </div>
+                            <div>
+                                <label asp-for="RegTicketModels[i].regTicketDate">Date:</label>
+                                <input type="date" asp-for="RegTicketModels[i].regTicketDate" class="form-control" required />
+                            </div>
+                            <div>
+                                <label asp-for="RegTicketModels[i].ticketSched">Schedule:</label>
+                                <input type="time" asp-for="RegTicketModels[i].ticketSched" class="form-control" required />
+                            </div>
+                        }
+
+                        <!-- Payment -->
+                        <div>
+                            <label for="regPaymentMode">Payment Mode: </label>
+                            <select asp-for="RegPaymentModel.regPaymentMode" id="paymentMode" required>
+                                <option value="">Select...</option>
+                                <option value="Cash">Cash</option>
+                                <option value="GCash">GCash: 09123456789</option>
+                            </select>
+                        </div>
+
+                        <div id="proofUploadContainer" style="display: none;">
+                            <label for="regProofPayment">Upload Proof of Payment (GCash Receipt):</label>
+                            <input type="file" name="proofImage" accept="image/*" class="form-control" />
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model?.RegPaymentModel?.regProofPayment))
+                        {
+                            <div class="mt-2">
+                                <label>Uploaded Proof:</label><br />
+                                <img src="@Model.RegPaymentModel.regProofPayment" alt="Proof of Payment" style="max-width: 300px;" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-submit-container">
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-danger"><strong> No Event Details found.</strong></p>
+}

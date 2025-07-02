@@ -1,0 +1,88 @@
+﻿@model pupslp_tickets.Models.EventDetailsModel
+
+@{
+    ViewData["Title"] = "Event Form";
+    ViewData["ShowSidebar"] = true;
+    ViewData["ShowAdminName"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="ps-3" style="max-width: 800px;">
+        <form asp-controller="EventDetails" asp-action="EventForm" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <h2 class="mb-4">Create / Edit Event</h2>
+
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <label class="form-label mb-0">Event Poster (Image)</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*"
+                           style="border-radius: 0.8rem;" onchange="validateImage(this)" />
+                </div>
+
+                <!-- Event Title -->
+                <div class="col-md-6">
+                    <label asp-for="eventTitle" class="form-label mb-0">Event Title</label>
+                    <input asp-for="eventTitle" class="form-control" style="border-radius: 0.8rem;" />
+                    <span asp-validation-for="eventTitle" class="text-danger small"></span>
+                </div>
+
+                <!-- Venue -->
+                <div class="col-md-6">
+                    <label asp-for="eventVenue" class="form-label mb-0">Venue</label>
+                    <input asp-for="eventVenue" class="form-control" style="border-radius: 0.8rem;" />
+                    <span asp-validation-for="eventVenue" class="text-danger small"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-12">
+                    <label asp-for="eventDescription" class="form-label mb-0">Description</label>
+                    <textarea asp-for="eventDescription" class="form-control" rows="3" style="border-radius: 0.8rem;"></textarea>
+                    <span asp-validation-for="eventDescription" class="text-danger small"></span>
+                </div>
+
+                <!-- Capacity -->
+                <div class="col-md-6">
+                    <label asp-for="eventCapacity" class="form-label mb-0">Capacity</label>
+                    <input asp-for="eventCapacity" type="number" class="form-control" style="border-radius: 0.8rem;" />
+                </div>
+
+                <!-- Price -->
+                <div class="col-md-6">
+                    <label asp-for="eventPrice" class="form-label mb-0">Price</label>
+                    <input asp-for="eventPrice" type="number" step="0.01" min="0" class="form-control" style="border-radius: 0.8rem;" />
+                </div>
+
+                <!-- Dates -->
+                <div class="col-md-6">
+                    <label asp-for="eventDates" class="form-label mb-0">Show Date</label>
+                    <input asp-for="eventDates" type="datetime-local" class="form-control" style="border-radius: 0.8rem;" />
+                </div>
+
+                <!-- House Manager Name -->
+                <div class="col-md-6">
+                    <label asp-for="hmName" class="form-label mb-0">House Manager Name</label>
+                    <input asp-for="hmName" class="form-control" style="border-radius: 0.8rem;" />
+                </div>
+
+                <!-- House Manager Contact -->
+                <div class="col-md-6">
+                    <label asp-for="hmContactInfo" class="form-label mb-0">House Manager Contact</label>
+                    <input asp-for="hmContactInfo" class="form-control" style="border-radius: 0.8rem;" />
+                </div>
+
+                <!-- Submit + Register Buttons -->
+                <div class="col-md-12 d-flex justify-content-between">
+                  
+                    <!-- Right-aligned: Save -->
+                    <button type="submit"
+                            class="btn btn-danger px-4"
+                            style="border-radius: 0.8rem;">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

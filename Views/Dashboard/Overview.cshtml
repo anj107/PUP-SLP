@@ -1,0 +1,83 @@
+﻿@model pupslp_tickets.Models.EventDetailsModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-dump-overview.css" />
+}
+
+@{
+    ViewBag.Title = "Dashboard Overview";
+    ViewBag.ActiveTab = "Dashboard";
+    ViewData["ShowAdminName"] = true;
+    ViewData["ShowLogOut"] = true;
+    var username = Context.Session.GetString("Username");
+}
+
+<div class="container mt-4">
+
+    <div class="dashboard-card bg-white p-4">
+        <div class="dashboard-header mb-4">
+            Event Overview
+        </div>
+
+        <div class="row g-4">
+            <!-- Left: Poster -->
+            <div class="col-md-4 text-center">
+                @if (!string.IsNullOrEmpty(Model?.eventPosterUrl))
+                {
+                    <img src="@Model.eventPosterUrl" alt="Event Poster" class="img-fluid rounded shadow-sm"
+                         style="max-width: 100%; max-height: 800px; aspect-ratio: 3 / 4; object-fit: cover;" />
+                }
+            </div>
+
+            <!-- Right: Info -->
+            <div class="col-md-8">
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Title:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.eventTitle</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Description:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.eventDescription</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Venue:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.eventVenue</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Capacity:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.eventCapacity</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Price:</div>
+                    <div class="col-sm-8 dashboard-value">₱@Model.eventPrice.ToString("F2")</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Date:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.eventDates.ToString("MMMM dd, yyyy • hh:mm tt")</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">House Manager:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.hmName</div>
+                </div>
+
+                <div class="dashboard-row row">
+                    <div class="col-sm-4 dashboard-label">Contact Info:</div>
+                    <div class="col-sm-8 dashboard-value">@Model.hmContactInfo</div>
+                </div>
+
+                <!-- Button -->
+                <div class="dashboard-actions mt-4">
+                    <a href="@Url.Action("Edit", "EventDetails", new { id = Model.Id })" class="btn btn-danger btn-custom" style="border-radius: 0.8rem";>
+                        Edit Event Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

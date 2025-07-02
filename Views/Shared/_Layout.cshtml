@@ -1,0 +1,158 @@
+﻿@inject pupslp_tickets.Models.DbModel _context
+
+@{
+    var adminName = Context.Session.GetString("Username") ?? "Admin";
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+
+    // for eventId value
+    var latestEvent = _context.eventDetailsModel
+        .OrderByDescending(e => e.Id)
+        .FirstOrDefault();
+
+    var latestEventId = latestEvent?.Id ?? 0; // fallback to 0 if null
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    @RenderSection("Styles", required: false)
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PUP SLR Ticketing System</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-dump-layout.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/pupslp_tickets.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+
+</head>
+<body>
+
+
+    <!-- Top Bar -->
+    <div class="topbar d-flex justify-content-between align-items-center px-4">
+        <!-- Logo + Title -->
+        <div class="d-flex align-items-center gap-3">
+            <a asp-controller="Home" asp-action="Index" class="d-flex align-items-center gap-3 text-decoration-none text-dark">
+                <div class="logo">
+                    <img src="~/images/PUP Polyrepertory Logo.png" alt="PUP SLR Logo" style="height: 40px;" />
+                </div>
+                <div class="title-section">
+                    <div>PUP Sining-Lahi Repertory</div>
+                    <div>Ticketing System</div>
+                </div>
+            </a>
+
+            @if (ViewData["ShowAdminName"] as bool? != false)
+            {
+                <div class="welcome-message ps-3" style="white-space: nowrap;">
+                    Welcome, <span style="color: #EB3A32;">@adminName</span>
+                </div>
+            }
+        </div>
+
+        <!-- Logout Dropdown on Right -->
+        @if (ViewData["ShowLogOut"] as bool? != false)
+        {
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-decoration-none dropdown-toggle"
+                   href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle fs-4" style="color: #EB3A32;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                        <a class="dropdown-item text-danger" asp-action="Logout" asp-controller="Account">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+
+
+    <div class="main-layout">
+        @if (ViewData["ShowSidebar"] as bool? == false)
+        {
+            <!-- Special layout for pages without sidebar -->
+            <style>
+                html, body {
+                    margin: 0;
+                    padding: 0;
+                    height: 100%;
+                    overflow: hidden;
+                }
+            </style>
+            <div class="d-flex flex-wrap flex-md-nowrap w-100" style="height: 100vh;">
+                <!-- Left image side (50%) -->
+                <div class="col-12 col-md-6 d-none d-md-block"
+                     style="background-image: url('@Url.Content("~/images/Kasaray_Duma.png")'); background-size: cover; background-position: center;">
+                </div>
+
+                <!-- Right form side (50%) -->
+                <div class="col-12 col-md-6 d-flex align-items-center justify-content-center p-5">
+                    <div class="w-100" style="max-width: 400px;">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <!-- Normal layout with sidebar -->
+            @if (ViewData["ShowSidebar"] as bool? != false)
+            {
+                <div class="sidebar bg-light p-3" style="min-width: 200px; height: 100vh;">
+                        <a class="section-title">OVERVIEW</a>
+                        <a href="@Url.Action("Overview", "Dashboard", new { id = latestEventId })"
+                           class="nav-link @(currentController == "Dashboard" && currentAction == "Overview" ? "active text-danger fw-bold" : "")"
+                           style="color: black;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Dashboard
+                        </a>
+
+                        <a class="section-title mt-3">EVENT OPERATIONS</a>
+                        <a href="@Url.Action("EventForm", "EventDetails")"
+                           class="nav-link @(currentController == "EventDetails" ? "active text-danger fw-bold" : "")"
+                           style="color: black; ">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Event Manager
+                        </a>
+
+                        <a href="@Url.Action("AudienceSchedules", "Attendance")"
+                           class="nav-link @(currentController == "Attendance" && currentAction == "AudienceSchedules" ? "active text-danger fw-bold" : "")"
+                           style="color: black; ">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Audience
+                        </a>
+
+                        <a href="@Url.Action("RegForm", "RegForm")"
+                           class="nav-link @(currentController == "RegForm" && currentAction == "RegForm" ? "active text-danger fw-bold" : "")"
+                           style="color: black;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Registration<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Form
+                        </a>                
+                </div>
+             
+
+            }
+
+            <!-- Main Content -->
+            <div class="content-wrapper flex-grow-1 p-4">
+                @RenderBody()
+            </div>
+        }
+    </div>
+
+    <!-- Scripts  -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
